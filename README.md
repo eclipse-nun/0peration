@@ -1,5 +1,7 @@
 ![0peration?](0peration/logo/0peration.png)
 
+[![0peration: Salvatore](https://github.com/eclipse-nun/0peration/actions/workflows/salvatore.yml/badge.svg)](https://github.com/eclipse-nun/0peration/actions/workflows/salvatore.yml)
+
 **ROM Feature:**
 
 - Heavily debloated for smooth use.
