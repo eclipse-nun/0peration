@@ -1009,7 +1009,7 @@ APPLY_STOCK_CONFIG() {
 
     # Fix unsupported BPF error for kernels lower than 5.10.
     if [ "$USE_UI_8_TETHERING_APEX" = "True" ]; then
-        cp -rfa "$(pwd)/LumiROM/Mods/bpf_patch/." "$EXTRACTED_FIRM_DIR/"
+        cp -rfa "$(pwd)/0peratn/Mods/bpf_patch/." "$EXTRACTED_FIRM_DIR/"
     fi
 
 	# Replace Stock Files.
@@ -1167,7 +1167,7 @@ APPENDING_DISPLAY_ID() {
 
 	local EXTRACTED_FIRM_DIR="$1"
 
-    APPEND_DISPLAY_ID "$1" "LumiROM 8.5.1 Stable"
+    APPEND_DISPLAY_ID "$1" "0peratn 8.5.1 Stable"
 }
 
 GEN_FS_CONFIG() {
@@ -1285,7 +1285,7 @@ BUILD_IMG() {
     local EXTRACTED_FIRM_DIR="$1"
     local FILE_SYSTEM="$2"
 	local OUT_DIR="$3"
-    local DEVICE_CONFIG="$(pwd)/LumiROM/Devices/${STOCK_DEVICE}/config"
+    local DEVICE_CONFIG="$(pwd)/0peratn/Devices/${STOCK_DEVICE}/config"
     local OP_LIST="$(pwd)/template/dynamic_partitions_op_list"
 
     if [[ -f "$DEVICE_CONFIG" ]]; then

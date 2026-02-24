@@ -1,16 +1,16 @@
-![LumiROM Logo](LumiROM/logo/LumiROM.png)
+![0peration?](0peration/logo/0peration.png)
 
 **ROM Feature:**
 
-\- Heavily debloated for smooth use.
+- Heavily debloated for smooth use.
 
-\- Bypassed screenshot detection.
+- Bypassed screenshot detection.
 
-\- Secure folder support.
+- Secure folder support.
 
-\- With Galaxy AI.
+- With Galaxy AI.
 
-\- And much more!
+- And much more!
 
 
 ## Licensing
@@ -23,7 +23,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 - **[img2sdat](https://github.com/xpirt/img2sdat)** - licensed under the MIT License
 ## 
 
-**For get latest OneUi roms check:**
+**For get latest OneUI roms check:**
 
 **LumiROM Channel:** https://t.me/LumiROMs
 
@@ -34,3 +34,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 Right Now on beta, as i'm including things yet
 
 **P.S: This is hard, very hard because I dont use AI to do the script**
+
+## Credits?
+[Lumi]: base script (ig)
+
+**Notes from [nc4tt]: maybe this will be delay a bit bc i'm ready for a huge examination!**

@@ -8,10 +8,10 @@ trap '{
     CMD=${BASH_COMMAND}
 
     echo ""
-    echo "❌ Build failed!"
-    echo "➡️ Line     : $LINE_NO"
-    echo "➡️ Command  : $CMD"
-    echo "➡️ Exit code: $EXIT_CODE"
+    echo "[x] Build failed!"
+    echo "[->] Line     : $LINE_NO"
+    echo "[->] Command  : $CMD"
+    echo "[->] Exit code: $EXIT_CODE"
     echo ""
 
     exit $EXIT_CODE
@@ -32,14 +32,14 @@ export OUTPUT_FILESYSTEM="$3"
 export OUT_DIR="$(pwd)/OUT"
 export WORK_DIR="$(pwd)/WORK"
 export FIRM_DIR="$(pwd)/FIRMWARE"
-export DEVICES_DIR="$(pwd)/LumiROM/Devices"
+export DEVICES_DIR="$(pwd)/0peratn/Devices"
 export APKTOOL="$(pwd)/bin/apktool/apktool.jar"
-export VNDKS_COLLECTION="$(pwd)/LumiROM/vndks"
+export VNDKS_COLLECTION="$(pwd)/0peratn/vndks"
 
 export BUILD_PARTITIONS="product,vendor,odm,system_ext,system"
 
 # Source
-source "$(pwd)/scripts/LumiROM.sh"
+source "$(pwd)/scripts/0peratn.sh"
 source "$DEVICES_DIR/$STOCK_DEVICE/config"
 
 DOWNLOAD_FIRMWARE "$TARGET_DEVICE" "$FIRM_DIR"
