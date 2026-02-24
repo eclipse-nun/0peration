@@ -1,4 +1,4 @@
-name: 0peration: Salvatore
+name: "0peration: Salvatore"
 
 on:
   workflow_dispatch:
