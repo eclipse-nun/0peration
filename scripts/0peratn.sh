@@ -1009,7 +1009,7 @@ APPLY_STOCK_CONFIG() {
 
     # Fix unsupported BPF error for kernels lower than 5.10.
     if [ "$USE_UI_8_TETHERING_APEX" = "True" ]; then
-        cp -rfa "$(pwd)/0peratn/Mods/bpf_patch/." "$EXTRACTED_FIRM_DIR/"
+        cp -rfa "$(pwd)/0peration/Mods/bpf_patch/." "$EXTRACTED_FIRM_DIR/"
     fi
 
 	# Replace Stock Files.
@@ -1285,7 +1285,7 @@ BUILD_IMG() {
     local EXTRACTED_FIRM_DIR="$1"
     local FILE_SYSTEM="$2"
 	local OUT_DIR="$3"
-    local DEVICE_CONFIG="$(pwd)/0peratn/Devices/${STOCK_DEVICE}/config"
+    local DEVICE_CONFIG="$(pwd)/0peration/Devices/${STOCK_DEVICE}/config"
     local OP_LIST="$(pwd)/template/dynamic_partitions_op_list"
 
     if [[ -f "$DEVICE_CONFIG" ]]; then
