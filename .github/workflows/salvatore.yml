@@ -53,22 +53,22 @@ jobs:
         echo "OUT_DIR=$PWD/OUT" >> $GITHUB_ENV
         echo "WORK_DIR=$PWD/WORK" >> $GITHUB_ENV
         echo "FIRM_DIR=$PWD/FIRMWARE" >> $GITHUB_ENV
-        echo "DEVICES_DIR=$PWD/LumiROM/Devices" >> $GITHUB_ENV
+        echo "DEVICES_DIR=$PWD/0peration/Devices" >> $GITHUB_ENV
         echo "APKTOOL=$PWD/bin/apktool/apktool.jar" >> $GITHUB_ENV
-        echo "VNDKS_COLLECTION=$PWD/LumiROM/vndks" >> $GITHUB_ENV
+        echo "VNDKS_COLLECTION=$PWD/0peration/vndks" >> $GITHUB_ENV
         echo "BUILD_PARTITIONS=product,vendor,odm,system_ext,system" >> $GITHUB_ENV
 
     - name: Download firmware
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         source "$DEVICES_DIR/$STOCK_DEVICE/config"
         DOWNLOAD_FIRMWARE "$TARGET_DEVICE" "$FIRM_DIR"
 
     - name: Extract firmware
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         EXTRACT_FIRMWARE "$FIRM_DIR/$TARGET_DEVICE"
         PREPARE_PARTITIONS "$FIRM_DIR/$TARGET_DEVICE"
         EXTRACT_FIRMWARE_IMG "$FIRM_DIR/$TARGET_DEVICE"
@@ -76,7 +76,7 @@ jobs:
     - name: Apply vendor patches
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         DISABLE_FBE "$FIRM_DIR/$TARGET_DEVICE"
         DISABLE_FDE "$FIRM_DIR/$TARGET_DEVICE"
         DELETE_ICCC "$FIRM_DIR/$TARGET_DEVICE"
@@ -85,38 +85,38 @@ jobs:
     - name: Apply stock config
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         APPLY_STOCK_CONFIG "$FIRM_DIR/$TARGET_DEVICE"
 
     - name: Debloat ROM
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         DEBLOAT "$FIRM_DIR/$TARGET_DEVICE"
 
     - name: Apply features
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         APPLY_FEATURES "$FIRM_DIR/$TARGET_DEVICE"
 
     - name: Update Build ID
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         APPENDING_DISPLAY_ID "$FIRM_DIR/$TARGET_DEVICE"
 
     - name: Install stock framework-res
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         INSTALL_FRAMEWORK \
           "$FIRM_DIR/$TARGET_DEVICE/system/system/framework/framework-res.apk"
 
     - name: Decompile framework jars
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         DECOMPILE "$APKTOOL" \
           "$FIRM_DIR/$TARGET_DEVICE/system/system/framework/ssrm.jar" "$WORK_DIR"
         DECOMPILE "$APKTOOL" \
@@ -125,7 +125,7 @@ jobs:
     - name: Patch framework
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         PATCH_SSRM "$WORK_DIR/ssrm"
         PATCH_KNOX_GUARD "$WORK_DIR/services"
         PATCH_FLAG_SECURE "$WORK_DIR/services"
@@ -134,7 +134,7 @@ jobs:
     - name: Recompile framework
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         RECOMPILE "$APKTOOL" "$WORK_DIR/ssrm" \
           "$FIRM_DIR/$TARGET_DEVICE/system/system/framework" "$WORK_DIR"
         RECOMPILE "$APKTOOL" "$WORK_DIR/services" \
@@ -145,7 +145,7 @@ jobs:
     - name: Build images
       shell: bash
       run: |
-        source scripts/LumiROM.sh
+        source scripts/0peratn.sh
         BUILD_IMG "$FIRM_DIR/$TARGET_DEVICE" "$OUTPUT_FILESYSTEM" "$OUT_DIR"
         IMG_TO_SDAT_AND_COMPRESS "$OUT_DIR" "TMP"
 
@@ -211,7 +211,7 @@ jobs:
         TEMPLATE_DIR="$(pwd)/template"
         mkdir -p "$TEMPLATE_DIR"
 
-        SPECIFIC_BOOT="$(pwd)/LumiROM/Devices/$DEVICE/boot.img"
+        SPECIFIC_BOOT="$(pwd)/0peration/Devices/$DEVICE/boot.img"
 
         if [ -f "$SPECIFIC_BOOT" ]; then
             echo "-> Copying boot.img from $DEVICE..."
@@ -226,7 +226,7 @@ jobs:
         cp TMP/*.transfer.list "$TEMPLATE_DIR"/ 2>/dev/null || true
 
         echo "Creating ZIP package..."
-        ZIP_FILE="LumiROM_${ROM_VERSION}-${BUILD_DATE}_${DEVICE_CODENAME}.zip"
+        ZIP_FILE="0peration_${ROM_VERSION}-${BUILD_DATE}_${DEVICE_CODENAME}.zip"
         [ -f "$ZIP_FILE" ] && rm "$ZIP_FILE"
 
         # ZIP the rom
