@@ -1167,63 +1167,41 @@ APPENDING_DISPLAY_ID() {
 
 	local EXTRACTED_FIRM_DIR="$1"
 
-    APPEND_DISPLAY_ID "$1" "0peratn 8.5.1 Stable"
+    APPEND_DISPLAY_ID "$1" "0p_tn Salvatore v8.5.1 Stable"
 }
 
-GEN_FS_CONFIG() {
-    if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} <EXTRACTED_FIRM_DIR>"
-        return 1
-    fi
 
+GEN_FS_CONFIG() {
     local EXTRACTED_FIRM_DIR="$1"
 
-    [ ! -d "$EXTRACTED_FIRM_DIR" ] && {
-        echo "- $EXTRACTED_FIRM_DIR not found."
-        return 1
-    }
-
-    [ ! -d "$EXTRACTED_FIRM_DIR/config" ] && {
-        echo "[ERROR] config directory missing"
-        return 1
-    }
-
     for ROOT in "$EXTRACTED_FIRM_DIR"/*; do
-        [ ! -d "$ROOT" ] && continue
-
+        [[ -d "$ROOT" ]] || continue
         PARTITION="$(basename "$ROOT")"
-        [ "$PARTITION" = "config" ] && continue
+        [[ "$PARTITION" == "config" ]] && continue
 
         local FS_CONFIG="$EXTRACTED_FIRM_DIR/config/${PARTITION}_fs_config"
-        local TMP_EXISTING
-        TMP_EXISTING="$(mktemp)"
+        echo "Generating relative fs_config for: $PARTITION"
 
-        sudo touch "$FS_CONFIG"
+        {
+            echo "/ 0 0 0755"
+            echo ". 0 0 0755"
+            echo "./ 0 0 0755"
+        } | sudo tee "$FS_CONFIG" > /dev/null
 
-        echo ""
-        echo "Generating fs_config for partition: $PARTITION"
-        #echo "- Source : $ROOT"
-        #echo "- Output : $FS_CONFIG"
-
-        sudo awk '{print $1}' "$FS_CONFIG" | sort -u > "$TMP_EXISTING"
-
-        sudo find "$ROOT" -mindepth 1 \( -type f -o -type d \) | while IFS= read -r item; do
+        sudo find "$ROOT" -mindepth 1 \( -type f -o -type d -o -type l \) | while IFS= read -r item; do
             local REL_PATH="${item#$ROOT/}"
-            local PATH_ENTRY="$PARTITION/$REL_PATH"
-
-            sudo grep -qxF "$PATH_ENTRY" "$TMP_EXISTING" && continue
-
+            
             if [ -d "$item" ]; then
-                # echo "- Dir  : $PATH_ENTRY (0755)"
-                sudo printf "%s 0 0 0755\n" "$PATH_ENTRY" >> "$FS_CONFIG"
+                echo "$REL_PATH 0 0 0755"
             else
-                # echo "- File : $PATH_ENTRY (0644)"
-                sudo printf "%s 0 0 0644\n" "$PATH_ENTRY" >> "$FS_CONFIG"
+                echo "$REL_PATH 0 0 0644"
             fi
-        done
+        done | sudo tee -a "$FS_CONFIG" > /dev/null
 
-        sudo rm -f "$TMP_EXISTING"
-        echo "- $PARTITION fs_config generated"
+        sudo sed -i '/^$/d; s/[[:space:]]*$//' "$FS_CONFIG"
+        sudo sort -u "$FS_CONFIG" -o "$FS_CONFIG"
+
+        echo "- $PARTITION fs_config generated (relative format)"
     done
 }
 
@@ -1324,11 +1302,11 @@ BUILD_IMG() {
 
         sudo sort -u "$FILE_CONTEXTS" -o "$FILE_CONTEXTS"
         sudo sort -u "$FS_CONFIG" -o "$FS_CONFIG"
-        sudo chown -R $(whoami):$(whoami) "${OUT_IMG}/vendor/*"
+        sudo chown -R $(whoami):$(whoami) "${EXTRACTED_FIRM_DIR}"/vendor/
 
         if [[ "$FILE_SYSTEM" == "erofs" ]]; then
             echo -e "\e[33mBuilding EROFS image:\e[0m $OUT_IMG"
-            sudo $(pwd)/bin/erofs-utils/mkfs.erofs --mount-point="$MOUNT_POINT" --fs-config-file="$FS_CONFIG" --file-contexts="$FILE_CONTEXTS" -z lz4hc -b 4096 -T 1199145600 "$OUT_IMG" "$SRC_DIR"
+            sudo $(pwd)/bin/erofs-utils/mkfs.erofs --fs-config-file="$FS_CONFIG" --file-contexts="$FILE_CONTEXTS" -z lz4hc -b 4096 -T 1199145600 "$OUT_IMG" "$SRC_DIR"
             sudo chown $(whoami):$(whoami) "$OUT_IMG"
 
         elif [[ "$FILE_SYSTEM" == "Linux" && "$FILE_SYSTEM" == "ext4" ]]; then
